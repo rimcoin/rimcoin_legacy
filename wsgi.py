@@ -2,56 +2,57 @@
 
 import random,time
 def app(p,env):
-    out=""
-    path=p[1:].split(":")
-    print(path)
-    command=path[0]
+    out="" # output string
+    path=p[1:].split(":") # get command and arguments
+    print(path) # useful for debugging
+    command=path[0] # for checking what the command is
     if command=="sub":
-        i=open('users','r')
-        i=eval(i.read())
-        for j in path[2].split("/"):
+        i=open('users','r') # get file with users
+        i=eval(i.read()) # read said file
+        for j in path[2].split("/"): # loop for verifying the rimcoin
             try:
-                if rcm(int(j)) and j!=0:
-                    i[path[1]]+=0.000001
+                if rcm(int(j)) and j!=0: # if it isn't 0, and is rimcoin, add 1/1000000th of a rimcoin. 
+                    i[path[1]]+=0.000001 # it is, so add it
             except:
                 pass
-        j=open('users','w')
+        j=open('users','w') # write the file
         j.write(str(i))
         j.close()
     elif command=="send":
-        i=open('users','r')
-        i=eval(i.read())
-        if eval(open('ids','r').read())[path[3]]==int(path[4]):
-            i[path[1]]+=float(path[2])
-            i[path[3]]-=float(path[2])
-        j=open('users','w')
+        i=open('users','r') # get users file
+        i=eval(i.read()) # read said file
+        if eval(open('ids','r').read())[path[3]]==int(path[4]): # if the verification number is correct, send the money 
+            i[path[1]]+=float(path[2]) # give reciever money
+            i[path[3]]-=float(path[2]) # remove sender's money
+        j=open('users','w') # write the file
         j.write(str(i))
         j.close()
     elif command=="bal":
-        i=open('users','r')
-        i=eval(i.read())
-        return str(i[path[1]]);
+        i=open('users','r') # open users file
+        i=eval(i.read()) # read said file
+        return str(i[path[1]]); # read user's balance
     elif command=="cre":
-        i=open('users','r')
-        i=eval(i.read())
+        i=open('users','r') # read users file
+        i=eval(i.read()) # read said file
         try:
-            print(i[path[1]])
+            print(i[path[1]]) # if this prints, they exist so don't create the account
         except:
-            i[path[1]]=0
-            j=open('users','w')
+            i[path[1]]=0 # set balance
+            j=open('users','w') # write file
             j.write(str(i))
             j.close()
-            i=open('ids','r')
-            i=eval(i.read())
-            i[path[1]]=random.randint(10**9,(10**10)-1)
-            out+=str(i[path[1]])
-            j=open('ids','w')
-            j.write(str(i))
+            i=open('ids','r') # open file with 10 digit numbers
+            i=eval(i.read()) # read said file
+            i[path[1]]=random.randint(10**9,(10**10)-1) # set random number
+            out+=str(i[path[1]]) # output 10 digit number to user
+            j=open('ids','w') # open it for writing
+            j.write(str(i)) # write the file
             j.close()
     elif command=="app":
-        i=open('users','r')
-        i=eval(i.read())
-        bal=str(i[path[1]]);
+        i=open('users','r') # open users file
+        i=eval(i.read()) # read said file
+        bal=str(i[path[1]]); # get balance
+        # final html
         out+="""
 <html>
 <head>
@@ -91,6 +92,7 @@ setInterval(function f(){document.getElementById('z').innerHTML=bal.toString();}
 
 </center></body></html>"""
     elif command=="mine":
+        # html for mining in browser
         out+="""
 <html>
 <body>
@@ -133,30 +135,33 @@ location=location;</script>
 </body>
 </html>"""
     elif command=="mkt":
-        k=0
-        i=open('users','r')
-        i=eval(i.read())
+        k=0 # number for market cap
+        i=open('users','r') # open user file
+        i=eval(i.read()) # read said file
         for j in i:
-            if i[j]>0:
-                k+=i[j]
-        out+=str(k)
-    return out;
+            if i[j]>0: # if they're 0, they don't count, as they're not contributing to the market cap
+                k+=i[j] # add account balance
+        out+=str(k) # add output of market cap
+    return out; # return the output
 def rcm(i):
-    j=0
-    k=0
+    j=0 # count
+    k=0 # token
     while j<(i**0.01):
         try:
-            k+=int(j%int(j**0.5))
+            k+=int(j%int(j**0.5)) # algorithm
         except:
             pass
-        j+=1
-    return (k%2**16)==0;
+        j+=1 # add 1
+    return (k%2**16)==0; # if multiple of 2**16, true
 def application(environ, start_response):
-    i=open("ids","r")
-    i=eval(i.read())
-    status="200 OK"
-    print(str(environ))
-    content=app(environ["PATH_INFO"],environ)
-    response_headers = [('Content-Type', 'text/html'), ('Content-Length', str(len(content)))]
-    start_response(status, response_headers)
-    yield content.encode('utf8')
+    status="200 OK" # http status
+    print(str(environ)) # print environment variables, for debugging
+    if environ["PATH_INFO"]=="/":
+        content=open("index.html","r").read() # website
+    elif environ["PATH_INFO"]=="/get_started":
+        content=open("get_started.html","r").read() # website's getting started page
+    else:
+        content=app(environ["PATH_INFO"],environ) # if not website, treat it as command
+    response_headers = [('Content-Type', 'text/html'), ('Content-Length', str(len(content)))] # Response header
+    start_response(status, response_headers) # Start the response
+    yield content.encode('utf8') # give content, as utf8
