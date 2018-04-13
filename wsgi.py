@@ -75,7 +75,7 @@ def app(p,env):
 <p><div id="z" style="font-family:helvetica"></div></p>
 <h1 style="font-family:helvetica">Function</h1>
 <button onclick="
-rec=prompt('Recieving Address? ');am=prompt('Amount? ');getText('https://rimcoin.pythonanywhere.com/send:'+rec+':'+am+':'+localStorage.user+':'+prompt('Secret Key? '));bal-=am.parseFloat();">Send</button>
+rec=prompt('Recieving Address? ');am=prompt('Amount? ');getText('"""+env["HTTP_HOST"]+"""/send:'+rec+':'+am+':'+localStorage.user+':'+prompt('Secret Key? '));bal-=am.parseFloat();">Send</button>
 <script>
 bal="""+bal+""";
 function getText(url){
@@ -124,7 +124,7 @@ function rcm(i){
                 c.push(String(go));
 	};;
         if (true){;
-            var x=('http://rimcoin.pythonanywhere.com/sub:'+user+':'+c.join("/")+"/0");
+            var x=('"""+env["HTTP_HOST"]+"""/sub:'+user+':'+c.join("/")+"/0");
 		loadDoc(x);
             c=[];
 
