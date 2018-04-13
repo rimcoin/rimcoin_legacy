@@ -21,7 +21,7 @@ def app(p,env):
     elif command=="send":
         i=open('users','r') # get users file
         i=eval(i.read()) # read said file
-        if eval(open('ids','r').read())[path[3]]==int(path[4]): # if the verification number is correct, send the money 
+        if eval(open('ids','r').read())[path[3]]==int(path[4]) and float(path[2])>0: # if the verification number is correct, send the money 
             i[path[1]]+=float(path[2]) # give reciever money
             i[path[3]]-=float(path[2]) # remove sender's money
         j=open('users','w') # write the file
