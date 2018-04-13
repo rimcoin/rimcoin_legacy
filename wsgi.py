@@ -1,4 +1,4 @@
-# This is the WSGI configuration file. 
+# This is the WSGI configuration file.
 
 import random,time
 def app(p,env):
@@ -11,7 +11,7 @@ def app(p,env):
         i=eval(i.read()) # read said file
         for j in path[2].split("/"): # loop for verifying the rimcoin
             try:
-                if rcm(int(j)) and j!=0: # if it isn't 0, and is rimcoin, add 1/1000000th of a rimcoin. 
+                if rcm(int(j)) and j!=0: # if it isn't 0, and is rimcoin, add 1/1000000th of a rimcoin.
                     i[path[1]]+=0.000001 # it is, so add it
             except:
                 pass
@@ -21,7 +21,7 @@ def app(p,env):
     elif command=="send":
         i=open('users','r') # get users file
         i=eval(i.read()) # read said file
-        if eval(open('ids','r').read())[path[3]]==int(path[4]) and float(path[2])>0: # if the verification number is correct, send the money 
+        if eval(open('ids','r').read())[path[3]]==int(path[4]) and float(path[2])>0: # if the verification number is correct, send the money
             i[path[1]]+=float(path[2]) # give reciever money
             i[path[3]]-=float(path[2]) # remove sender's money
         j=open('users','w') # write the file
@@ -75,7 +75,7 @@ def app(p,env):
 <p><div id="z" style="font-family:helvetica"></div></p>
 <h1 style="font-family:helvetica">Function</h1>
 <button onclick="
-rec=prompt('Recieving Address? ');am=prompt('Amount? ');getText('"""+env["HTTP_HOST"]+"""/send:'+rec+':'+am+':'+localStorage.user+':'+prompt('Secret Key? '));bal-=am.parseFloat();">Send</button>
+rec=prompt('Recieving Address? ');am=prompt('Amount? ');getText('/send:'+rec+':'+am+':'+localStorage.user+':'+prompt('Secret Key? '));bal-=am.parseFloat();">Send</button>
 <script>
 bal="""+bal+""";
 function getText(url){
@@ -124,7 +124,7 @@ function rcm(i){
                 c.push(String(go));
 	};;
         if (true){;
-            var x=('"""+env["HTTP_HOST"]+"""/sub:'+user+':'+c.join("/")+"/0");
+            var x=('/sub:'+user+':'+c.join("/")+"/0");
 		loadDoc(x);
             c=[];
 
