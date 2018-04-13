@@ -156,12 +156,7 @@ def application(environ, start_response):
     i=eval(i.read())
     status="200 OK"
     print(str(environ))
-    if environ["PATH_INFO"]=="/":
-        content=open("index.html","r").read()
-    elif environ["PATH_INFO"]=="/get_started":
-        content=open("get_started.html","r").read()
-    else:
-        content=app(environ["PATH_INFO"],environ)
+    content=app(environ["PATH_INFO"],environ)
     response_headers = [('Content-Type', 'text/html'), ('Content-Length', str(len(content)))]
     start_response(status, response_headers)
     yield content.encode('utf8')
