@@ -21,7 +21,7 @@ def app(p,env):
     elif command=="send":
         i=open('users','r') # get users file
         i=eval(i.read()) # read said file
-        if eval(open('ids','r').read())[path[3]]==int(path[4]) and float(path[2])>0: # if the verification number is correct, send the money
+        if eval(open('ids','r').read())[path[3]]==hash(path[4]) and float(path[2])>0: # if the verification number is correct, send the money
             i[path[1]]+=float(path[2]) # give reciever money
             i[path[3]]-=float(path[2]) # remove sender's money
         j=open('users','w') # write the file
@@ -43,8 +43,9 @@ def app(p,env):
             j.close()
             i=open('ids','r') # open file with 10 digit numbers
             i=eval(i.read()) # read said file
-            i[path[1]]=random.randint(10**9,(10**10)-1) # set random number
-            out+=str(i[path[1]]) # output 10 digit number to user
+            uid=str(random.randint(10**9,(10**10)-1))
+            i[path[1]]=hash(uid) # set random number
+            out+=str(uid) # output 10 digit number to user
             j=open('ids','w') # open it for writing
             j.write(str(i)) # write the file
             j.close()
