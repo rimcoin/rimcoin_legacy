@@ -161,6 +161,8 @@ def application(environ, start_response):
         content=open("index.html","r").read() # website
     elif environ["PATH_INFO"]=="/get_started":
         content=open("get_started.html","r").read() # website's getting started page
+    elif environ["PATH_INFO"]=="/develop":
+        content=open("develop.html","r").read() # developing page
     else:
         content=app(environ["PATH_INFO"],environ) # if not website, treat it as command
     response_headers = [('Content-Type', 'text/html'), ('Content-Length', str(len(content)))] # Response header
